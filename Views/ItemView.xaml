@@ -1,0 +1,58 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ToDoList"
+        xmlns:ViewModels="clr-namespace:ToDoList.ViewModels" x:Class="ToDoList.Views.ItemView"
+        mc:Ignorable="d"
+        Title="ToDoList" Height="450" Width="800">
+    <TabControl>
+        <TabItem Header="Задачи">
+            <StackPanel>
+                <Grid VerticalAlignment="Top" Margin="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Text ="{Binding Item.Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  />
+                    <Button Grid.Column="1" Command="{Binding AddCommand}"  CommandParameter="{Binding Item}" Content="Добавить"/>
+                </Grid>
+                <ListView ItemsSource="{Binding Path=ItemsList}" x:Name="ItemsView" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0" Width="50" Margin="0 0 5 0" Command="{Binding Path=DataContext.DelCommand, ElementName=ItemsView}" CommandParameter="{Binding}" Content="Удалить"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Stretch" Margin="0 0 5 0" Text="{Binding Description}" />
+                                <Button Grid.Column="3" Width="80" Margin="0 0 5 0" Command="{Binding Path=DataContext.DoneCommand, ElementName=ItemsView}" CommandParameter="{Binding}" Content="Выполненно"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="История">
+            <ListView ItemsSource="{Binding Path=ItemsHistoryList}" x:Name="ItemsHistoryView" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Stretch" Margin="0 0 5 0" Text="{Binding Description}" />
+                            <Button Grid.Column="3" Width="95" Margin="0 0 5 0" Command="{Binding Path=DataContext.DoneCommand, ElementName=ItemsHistoryView}" CommandParameter="{Binding}" Content="Не выполненно"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </TabItem>
+    </TabControl>
+</Window>
